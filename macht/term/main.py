@@ -33,8 +33,8 @@ def term_resize(term, grid, signum, frame):
     for row_idx, row in enumerate(grid):
         for col_idx, tile in enumerate(row):
             if tile:
-                x, y = grid.tile_coord(row_idx, col_idx)
-                grid[row_idx][col_idx].x, grid[row_idx][col_idx].y = x, y
+                tile.x, tile.y = grid.tile_coord(row_idx, col_idx)
+                grid[row_idx][col_idx] = tile
 
     grid.draw()
     grid.draw_tiles()
