@@ -16,15 +16,15 @@ class Grid(grid.Grid):
                  term=None, Tile=tile.Tile):
         super(Grid, self).__init__(rows=rows, cols=cols, Tile=Tile)
         self.x, self.y = x, y
-        self.cols, self.rows = cols, rows
         self.tile_width, self.tile_height = tile_width, tile_height
         self.term = term
         self.Tile = Tile
 
     def draw(self, fg='white', bg=None):
         style = getattr(self.term, fg + ("_on_" + bg if bg else ""))
+        rows, cols = len(self), len(self[0])
 
-        for col_idx in range(self.cols - 1):
+        for col_idx in range(cols - 1):
             hor_offset = ((col_idx + 1) * self.tile_width +
                           col_idx * len(self.vert_div))
 
@@ -33,11 +33,11 @@ class Grid(grid.Grid):
                                         self.y + vert_offset):
                     print(style(self.vert_div))
 
-        for row_idx in range(self.rows - 1):
+        for row_idx in range(rows - 1):
             vert_offset = (row_idx + 1) * self.tile_height + row_idx
             with self.term.location(self.x, self.y + vert_offset):
                 print(style(self.cross_div.join(
-                      [self.hor_div * self.tile_width] * (self.cols))))
+                      [self.hor_div * self.tile_width] * cols)))
 
     def draw_tiles(self):
         for tile in filter(None, chain(*self)):  # all non-empty tiles
@@ -58,19 +58,20 @@ class Grid(grid.Grid):
 
     @property
     def width(self):
-        if self.cols > 0:
-            div_width = (self.cols - 1) * len(self.vert_div)
-            return self.cols * self.tile_width + div_width
+        cols = len(self[0])
+        if cols > 0:
+            return cols * self.tile_width + (cols - 1) * len(self.vert_div)
         return 0
 
     @property
     def height(self):
-        if self.rows > 0:
-            return self.rows * self.tile_height + self.rows - 1
+        rows = len(self)
+        if rows > 0:
+            return rows * self.tile_height + rows - 1
         return 0
 
     def tile_coord(self, row, column):
-        if row >= self.rows or column >= self.cols:
+        if row >= len(self) or column >= len(self[0]):
             raise IndexError
 
         x = self.x + column * self.tile_width + column * len(self.vert_div)
