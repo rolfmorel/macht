@@ -84,6 +84,8 @@ class Grid(grid.Grid):
         row, column = action.new
 
         self[row][column].x, self[row][column].y = self.tile_coord(row, column)
+        self[row][column].height = self.tile_height
+        self[row][column].width = self.tile_width
 
         return action
 

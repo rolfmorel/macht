@@ -36,14 +36,29 @@ def draw_score(score, grid, term, end=False):
         print(term.bold_on_red(msg) if end else term.bold(msg))
 
 
-def term_resize(term, grid, signum, frame):
+def term_resize(term, grid, signum=None, frame=None):
     print(term.clear())
+
+    for tile_height in range(10, 3, -1):
+        grid.tile_height, grid.tile_width = tile_height, tile_height * 2
+
+        if grid.height + 1 < term.height and grid.width <= term.width:
+            break
+    else:
+        with term.location(0, 0):
+            print(term.red("terminal size is too small;\n"
+                           "please resize the terminal"))
+
+        return
+
     grid.x = term.width // 2 - grid.width // 2
 
     for row_idx, row in enumerate(grid):
         for col_idx, tile in enumerate(row):
             if tile:
                 tile.x, tile.y = grid.tile_coord(row_idx, col_idx)
+                tile.height, tile.width = grid.tile_height, grid.tile_width
+
                 grid[row_idx][col_idx] = tile
 
     grid.draw()
@@ -55,15 +70,10 @@ def main(args=None):
 
     term = blessed.Terminal()
 
-    tile_dim = TileDimensions(10, 5)
+    DimTile = partial(Tile, base=opts.base, term=term)
 
-    DimTile = partial(Tile, base=opts.base, width=tile_dim.width,
-                      height=tile_dim.height, term=term)
-
-    grid = Grid(x=0, y=1, rows=opts.rows, cols=opts.columns,
-                tile_width=tile_dim.width, tile_height=tile_dim.height,
-                term=term, Tile=DimTile)
-    grid.x = term.width // 2 - grid.width // 2
+    grid = Grid(x=0, y=1, rows=opts.rows, cols=opts.columns, term=term,
+                Tile=DimTile)
 
     signal.signal(signal.SIGWINCH, partial(term_resize, term, grid))
 
@@ -72,8 +82,7 @@ def main(args=None):
 
     score = 0
     with term.fullscreen(), term.cbreak(), term.hidden_cursor():
-        grid.draw()
-        grid.draw_tiles()
+        term_resize(term, grid)
 
         key = blessed.keyboard.Keystroke('')
         while key != 'q':
