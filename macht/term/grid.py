@@ -4,7 +4,7 @@ from .. import grid
 from . import tile
 
 bg_colors = ['red', 'magenta', 'green', 'cyan', 'blue', 'cyan', 'yellow']
-fg_colors = ['black', 'black', 'black', 'black', 'white', 'black']
+fg_colors = ['black', 'black', 'black', 'black', 'white', 'black', 'black']
 
 
 class Grid(grid.Grid):
