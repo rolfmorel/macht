@@ -30,10 +30,10 @@ parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
                     default=2)
 
 
-def draw_score(score, grid, term):
+def draw_score(score, grid, term, end=False):
     msg = "score: " + str(score)
     with term.location(grid.x + grid.width - len(msg), 0):
-        print(term.bold(msg))
+        print(term.bold_on_red(msg) if end else term.bold(msg))
 
 
 def term_resize(term, grid, signum, frame):
@@ -105,10 +105,8 @@ def main(args=None):
                         if grid.move(direction, apply=False):
                             possible_moves += 1
 
-                    with term.location(0, 0):
-                        print('full, possible moves:', possible_moves)
-
                     if possible_moves == 0:
+                        draw_score(score, grid, term, end=True)
                         term.inkey()
 
                         return 2
