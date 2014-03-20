@@ -13,14 +13,14 @@ Actions = Enum('Actions', "spawn move merge")
 
 
 class GridAction(object):
-    def __init__(self, action, new_pos, old_pos=None):
+    def __init__(self, type, new_pos, old_pos=None):
         # Actions:
-        self.action = action
+        self.type = type
         # Position:
         self.new, self.old = new_pos, old_pos
 
     def __repr__(self):
-        return "GridAction({}, new={}{})".format(self.action, self.new,
+        return "GridAction({}, new={}{})".format(self.type, self.new,
                 ", old=" + self.old if self.old else "")
 
 

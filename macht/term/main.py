@@ -88,7 +88,7 @@ def main(args=None):
                 for action in actions:
                     grid.draw_empty_tile(*action.old)
 
-                    if action.action == Actions.merge:
+                    if action.type == Actions.merge:
                         score += grid[action.new.row][action.new.column].value
 
                 if actions:  # had a successfull move?
