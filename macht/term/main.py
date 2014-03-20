@@ -22,12 +22,13 @@ for keys, direction in zip((up, left, down, right), Direction):
     grid_moves.update(dict.fromkeys(keys, direction))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--columns', metavar='N', dest='columns',
-                    type=int, default=4)
-parser.add_argument('-r', '--rows', metavar='N', dest='rows', type=int,
-                    default=4)
+parser.add_argument('-c', '--columns', metavar='COLS', dest='columns',
+                    type=int, default=4,
+                    help="number of columns used for the grid")
+parser.add_argument('-r', '--rows', metavar='ROWS', dest='rows', type=int,
+                    default=4, help="number of rows used for the grid")
 parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
-                    default=2)
+                    default=2, help="base value of each tile")
 
 
 def draw_score(score, grid, term, end=False):
