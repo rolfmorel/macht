@@ -1,3 +1,4 @@
+from sys import exit
 from .main import main
 
-main()
+exit(main())

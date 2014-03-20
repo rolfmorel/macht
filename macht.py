@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from sys import exit
 from macht.term import main
 
-main()
+exit(main())
