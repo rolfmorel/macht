@@ -96,7 +96,7 @@ def main(args=None):
 
                     grid.draw_tiles()
 
-                if not list(filter(lambda t: not t, chain(*grid))):  # full?
+                if not any(True for tile in chain(*grid) if not tile):  # full?
                     possible_moves = 0
                     for direction in Direction:
                         if grid.move(direction, apply=False):
