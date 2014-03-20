@@ -109,6 +109,8 @@ def main(args=None):
                         draw_score(score, grid, term, end=True)
                         term.inkey()
 
-                        return 2
+                        break
+
+    print("score:", score)
 
     return 0
