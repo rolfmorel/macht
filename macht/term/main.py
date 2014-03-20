@@ -75,7 +75,7 @@ def main(args=None):
         grid.draw()
         grid.draw_tiles()
 
-        key = None
+        key = blessed.keyboard.Keystroke('')
         while key != 'q':
             draw_score(score, grid, term)
 
