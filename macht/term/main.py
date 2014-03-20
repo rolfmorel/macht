@@ -79,10 +79,7 @@ def main(args=None):
         while key != 'q':
             draw_score(score, grid, term)
 
-            try:  # the signal handler for SIGWINCH might be called
-                key = term.inkey()
-            except InterruptedError:
-                key = blessed.keyboard.Keystroke('')
+            key = term.inkey()
 
             direction = grid_moves.get(key.name or key)
             if direction:
