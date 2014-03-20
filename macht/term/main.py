@@ -1,5 +1,7 @@
+import sys
 import random
 import signal
+import argparse
 from functools import partial
 from itertools import chain
 from collections import namedtuple
@@ -18,6 +20,14 @@ down, right = ('s', 'j', 'KEY_DOWN'), ('d', 'l', 'KEY_RIGHT')
 grid_moves = {}
 for keys, direction in zip((up, left, down, right), Direction):
     grid_moves.update(dict.fromkeys(keys, direction))
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--columns', metavar='N', dest='columns',
+                    type=int, default=4)
+parser.add_argument('-r', '--rows', metavar='N', dest='rows', type=int,
+                    default=4)
+parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
+                    default=2)
 
 
 def draw_score(score, grid, term):
@@ -40,16 +50,19 @@ def term_resize(term, grid, signum, frame):
     grid.draw_tiles()
 
 
-def main():
+def main(args=None):
+    opts = parser.parse_args(args or sys.argv[1:])
+
     term = blessed.Terminal()
 
     tile_dim = TileDimensions(10, 5)
 
-    DimTile = partial(Tile, width=tile_dim.width, height=tile_dim.height,
-                      term=term)
+    DimTile = partial(Tile, base=opts.base, width=tile_dim.width,
+                      height=tile_dim.height, term=term)
 
-    grid = Grid(x=0, y=1, rows=4, cols=4, tile_width=tile_dim.width,
-                tile_height=tile_dim.height, term=term, Tile=DimTile)
+    grid = Grid(x=0, y=1, rows=opts.rows, cols=opts.columns,
+                tile_width=tile_dim.width, tile_height=tile_dim.height,
+                term=term, Tile=DimTile)
     grid.x = term.width // 2 - grid.width // 2
 
     signal.signal(signal.SIGWINCH, partial(term_resize, term, grid))
