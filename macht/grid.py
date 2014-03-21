@@ -28,7 +28,7 @@ class Grid(object):
     _grid = [[]]
 
     def __init__(self, rows=4, cols=4, Tile=Tile):
-        self._grid = [[None for _ in range(cols)] for _ in range(rows)]
+        self._grid = [[None] * cols] * rows
         self.Tile = Tile
 
     def __getitem__(self, item):
