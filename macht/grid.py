@@ -44,15 +44,12 @@ class Grid(object):
         return "Grid(cols={}, rows={})".format(len(self), len(self[0]))
 
     def spawn_tile(self, *args, row=None, column=None, apply=True, **kwargs):
+        rows, cols = len(self), len(self[0])
         empty_tiles = []
 
-        rows = self[row:row + 1] if row is not None else self
-        for row_idx, tile_row in enumerate(rows, row or 0):
-            for col_idx, tile in enumerate(tile_row):
-                if column is not None and col_idx != column:
-                    continue
-
-                if not tile:
+        for row_idx in range(row or 0, row + 1 if row else rows):
+            for col_idx in range(column or 0, column + 1 if column else cols):
+                if not self[row_idx][col_idx]:
                     empty_tiles.append((row_idx, col_idx))
 
         if len(empty_tiles) == 0:
