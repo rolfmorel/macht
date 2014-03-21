@@ -49,9 +49,9 @@ class Grid(object):
     def spawn_tile(self, *args, row=None, column=None, apply=True, **kwargs):
         rows, cols = len(self), len(self[0])
         empty_tiles = []
-
-        for row_idx in range(row or 0, row + 1 if row else rows):
-            for col_idx in range(column or 0, column + 1 if column else cols):
+        for row_idx in range(row or 0, row + 1 if row is not None else rows):
+            for col_idx in range(
+                    column or 0, column + 1 if column is not None else cols):
                 if not self[row_idx][col_idx]:
                     empty_tiles.append((row_idx, col_idx))
 
