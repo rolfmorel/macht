@@ -165,12 +165,13 @@ class Grid(object):
             if rows < len(self):
                 del self[rows:]
             elif rows > len(self):
-                self._grid.extend(
-                        [[None] * (cols or len(self[0]))] * (rows - len(self)))
+                columns = cols or len(self[0])
+                for _ in range(rows - len(self)):
+                    self._grid.append([None for _ in range(columns)])
 
         if cols:
             for row in self:
                 if cols < len(row):
                     del row[cols:]
                 elif cols > len(row):
-                    row.extend([None] * (cols - len(row)))
+                    row.extend([None for _ in range(cols - len(row))])
