@@ -44,7 +44,7 @@ class Grid(object):
         return len(self._grid)
 
     def __repr__(self):
-        return "Grid(cols={}, rows={})".format(len(self), len(self[0]))
+        return "Grid(rows={}, cols={})".format(len(self), len(self[0]))
 
     def spawn_tile(self, *args, row=None, column=None, apply=True, **kwargs):
         rows, cols = len(self), len(self[0])
