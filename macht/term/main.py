@@ -40,7 +40,7 @@ def draw_score(score, grid, term, end=False):
 def term_resize(term, grid, signum=None, frame=None):
     print(term.clear())
 
-    for tile_height in range(10, 3, -1):
+    for tile_height in range(10, 2, -1):
         grid.tile_height, grid.tile_width = tile_height, tile_height * 2
 
         if grid.height + 1 < term.height and grid.width <= term.width:
