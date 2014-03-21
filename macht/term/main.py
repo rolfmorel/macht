@@ -106,7 +106,7 @@ def main(args=None):
 
                     grid.draw_tiles()
 
-                if not any(True for tile in chain(*grid) if not tile):  # full?
+                if all(chain(*grid)):
                     possible_moves = 0
                     for direction in Direction:
                         if grid.move(direction, apply=False):
