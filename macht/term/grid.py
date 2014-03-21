@@ -12,7 +12,7 @@ class Grid(grid.Grid):
     hor_div = '='
     cross_div = 'XX'
 
-    def __init__(self, x=0, y=0, cols=0, rows=0, tile_width=0, tile_height=0,
+    def __init__(self, x=0, y=0, rows=0, cols=0, tile_width=0, tile_height=0,
                  term=None, Tile=tile.Tile):
         super(Grid, self).__init__(rows=rows, cols=cols, Tile=Tile)
         self.x, self.y = x, y

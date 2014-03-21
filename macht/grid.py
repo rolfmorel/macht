@@ -27,7 +27,7 @@ class GridAction(object):
 class Grid(object):
     _grid = [[]]
 
-    def __init__(self, cols=4, rows=4, Tile=Tile):
+    def __init__(self, rows=4, cols=4, Tile=Tile):
         self._grid = [[None for _ in range(cols)] for _ in range(rows)]
         self.Tile = Tile
 
