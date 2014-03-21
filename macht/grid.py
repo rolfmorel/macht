@@ -37,6 +37,9 @@ class Grid(object):
     def __setitem__(self, item, value):
         return self._grid.__setitem__(item, value)
 
+    def __delitem__(self, item):
+        return self._grid.__delitem__(item)
+
     def __len__(self):
         return len(self._grid)
 
