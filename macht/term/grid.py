@@ -44,7 +44,7 @@ class Grid(grid.Grid):
             # all bg colors have a bright variant doubling the amount of colors
             color_idx = (tile.exponent - 1) % (len(bg_colors) * 2) // 2
             bg = bg_colors[color_idx]
-            if tile.exponent % 2 == 0:
+            if self.term.number_of_colors >= 16 and tile.exponent % 2 == 0:
                 bg = "bright_" + bg
 
             tile.draw(fg=fg_colors[color_idx], bg=bg)
