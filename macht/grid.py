@@ -46,7 +46,9 @@ class Grid(object):
     def __repr__(self):
         return "Grid(rows={}, cols={})".format(len(self), len(self[0]))
 
-    def spawn_tile(self, *args, row=None, column=None, apply=True, **kwargs):
+    def spawn_tile(self, *args, **kwargs):
+        row, column = kwargs.pop('row', None), kwargs.pop('column', None)
+
         rows, cols = len(self), len(self[0])
         empty_tiles = []
         for row_idx in range(row or 0, row + 1 if row is not None else rows):
@@ -60,7 +62,7 @@ class Grid(object):
 
         row, column = random.choice(empty_tiles)
 
-        if apply:
+        if kwargs.pop('apply', True):
             self[row][column] = self.Tile(*args, **kwargs)
 
         return GridAction(Actions.spawn, Position(row, column))
