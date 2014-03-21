@@ -160,17 +160,17 @@ class Grid(object):
             return list(self.move_vertical(direction, apply))
         return list(self.move_horizontal(direction, apply))
 
-    def resize(self, width=None, height=None):
-        if height:
-            if height < len(self):
-                del self[height:]
-            elif height > len(self):
-                for _ in range(height - len(self)):
-                    self._grid.append([None for _ in range(len(self[0]))])
+    def resize(self, rows=None, cols=None):
+        if rows:
+            if rows < len(self):
+                del self[rows:]
+            elif rows > len(self):
+                self._grid.extend(
+                        [[None] * (cols or len(self[0]))] * (rows - len(self)))
 
-        if width and width != len(self[0]):
+        if cols:
             for row in self:
-                if width < len(row):
-                    del row[width:]
-                elif width > len(row):
-                    row.extend([None for _ in range(width - len(row))])
+                if cols < len(row):
+                    del row[cols:]
+                elif cols > len(row):
+                    row.extend([None] * (cols - len(row)))
