@@ -18,7 +18,6 @@ class Grid(grid.Grid):
         self.x, self.y = x, y
         self.tile_width, self.tile_height = tile_width, tile_height
         self.term = term
-        self.Tile = Tile
 
     def draw(self, fg='white', bg=None):
         style = getattr(self.term, fg + ("_on_" + bg if bg else ""))
