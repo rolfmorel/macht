@@ -2,7 +2,7 @@ import sys
 import random
 import signal
 import argparse
-from functools import partial
+from functools import partial, reduce
 from itertools import chain
 from collections import namedtuple
 
@@ -118,6 +118,7 @@ def main(args=None):
 
                         break
 
-    print("score:", score)
+    high = reduce(lambda o, t: max(o, t.value), filter(None, chain(*grid)), 0)
+    print("highest tile: {}\nscore: {}".format(high, score))
 
     return 0
