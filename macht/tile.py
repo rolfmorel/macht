@@ -25,7 +25,8 @@ class Tile(object):
         self.value = self.base ** self._exponent
 
     def __eq__(self, other):
-        return isinstance(other, Tile) and self.value == other.value
+        return (isinstance(other, Tile) and self.base == other.base and
+                self.exponent == other.exponent)
 
     def __repr__(self):
         return "Tile({}, {})".format(self.base, self.exponent)
