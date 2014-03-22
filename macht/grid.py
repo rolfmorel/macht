@@ -73,8 +73,9 @@ class Grid(object):
         return GridAction(Actions.move, new, old)
 
     def merge_tiles(self, old, new, apply=True):
-        if not self[new.row][new.column]:
-            raise ValueError  # TODO: better exception
+        if (not self[new.row][new.column] or
+                self[new.row][new.column] != self[old.row][old.column]):
+            raise ValueError
 
         if apply:
             self[new.row][new.column].exponent += 1
