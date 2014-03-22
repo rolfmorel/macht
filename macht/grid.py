@@ -66,6 +66,8 @@ class Grid(object):
         return GridAction(Actions.spawn, Position(row, column))
 
     def move_tile(self, old, new, apply=True):
+        old, new = Position(*old), Position(*new)
+
         if apply:
             self[new.row][new.column] = self[old.row][old.column]
             self[old.row][old.column] = None
@@ -73,6 +75,8 @@ class Grid(object):
         return GridAction(Actions.move, new, old)
 
     def merge_tiles(self, old, new, apply=True):
+        old, new = Position(*old), Position(*new)
+
         if (not self[new.row][new.column] or
                 self[new.row][new.column] != self[old.row][old.column]):
             raise ValueError
