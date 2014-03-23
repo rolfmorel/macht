@@ -21,7 +21,7 @@ class GridAction(object):
 
     def __repr__(self):
         return "GridAction({}, new={}{})".format(self.type, self.new,
-                ", old=" + self.old if self.old else "")
+                ", old=" + str(self.old) if self.old else "")
 
 
 class Grid(object):
