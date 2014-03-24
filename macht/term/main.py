@@ -21,49 +21,63 @@ grid_moves = {}
 for keys, direction in zip((up, left, down, right), Direction):
     grid_moves.update(dict.fromkeys(keys, direction))
 
+
+def grid_dimension(string):
+    rows, _, cols = string.partition('x')
+    try:
+        return int(rows), int(cols)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            "grid dimension was should look like: '4x4'")
+
+
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--columns', metavar='COLS', dest='columns',
-                    type=int, default=4,
-                    help="number of columns used for the grid")
-parser.add_argument('-r', '--rows', metavar='ROWS', dest='rows', type=int,
-                    default=4, help="number of rows used for the grid")
+parser.add_argument('grid_dims', metavar='GRID_DIMENSIONS', default=[(4, 4)],
+                    type=grid_dimension, nargs='*',
+                    help="Dimensions used for gird(s), default: '4x4'")
 parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
                     default=2, help="base value of each tile")
 
 
-def draw_score(score, grid, term, end=False):
+def draw_score(score, term, end=False):
     msg = "score: " + str(score)
-    with term.location(grid.x + grid.width - len(msg), 0):
+    with term.location(term.width // 2 - len(msg) // 2, 0):
         print(term.bold_on_red(msg) if end else term.bold(msg))
 
 
-def term_resize(term, grid, signum=None, frame=None):
+def term_resize(term, grids, signum=None, frame=None):
     print(term.clear())
 
-    for tile_height in range(10, 2, -1):
-        grid.tile_height, grid.tile_width = tile_height, tile_height * 2
+    max_width = (term.width - (len(grids) + 1) * 2) // len(grids)
 
-        if grid.height + 1 < term.height and grid.width <= term.width:
-            break
-    else:
-        with term.location(0, 0):
-            print(term.red("terminal size is too small;\n"
-                           "please resize the terminal"))
+    for grid in grids:
+        for tile_height in range(10, 2, -1):
+            grid.tile_height, grid.tile_width = tile_height, tile_height * 2
 
-        return
+            if grid.height + 1 < term.height and grid.width <= max_width:
+                break
+        else:
+            with term.location(0, 0):
+                print(term.red("terminal size is too small;\n"
+                               "please resize the terminal"))
 
-    grid.x = term.width // 2 - grid.width // 2
+            return
 
-    for row_idx, row in enumerate(grid):
-        for col_idx, tile in enumerate(row):
-            if tile:
-                tile.x, tile.y = grid.tile_coord(row_idx, col_idx)
-                tile.height, tile.width = grid.tile_height, grid.tile_width
+    margin = (term.width - sum(g.width for g in grids) -
+              (len(grids) - 1) * 2) // 2
+    for grid_idx, grid in enumerate(grids):
+        grid.x = margin + sum(g.width for g in grids[:grid_idx]) + grid_idx * 2
 
-                grid[row_idx][col_idx] = tile
+        for row_idx, row in enumerate(grid):
+            for col_idx, tile in enumerate(row):
+                if tile:
+                    tile.x, tile.y = grid.tile_coord(row_idx, col_idx)
+                    tile.height, tile.width = grid.tile_height, grid.tile_width
 
-    grid.draw()
-    grid.draw_tiles()
+                    grid[row_idx][col_idx] = tile
+
+        grid.draw()
+        grid.draw_tiles()
 
 
 def main(args=None):
@@ -73,52 +87,61 @@ def main(args=None):
 
     DimTile = partial(Tile, base=opts.base, term=term)
 
-    grid = Grid(x=0, y=1, rows=opts.rows, cols=opts.columns, term=term,
-                Tile=DimTile)
+    grids = []
+    for grid_dim in opts.grid_dims:
+        rows, cols = grid_dim
 
-    signal.signal(signal.SIGWINCH, partial(term_resize, term, grid))
+        grid = Grid(x=0, y=1, rows=rows, cols=cols, term=term, Tile=DimTile)
+        grid.spawn_tile()
+        grid.spawn_tile()
 
-    grid.spawn_tile()
-    grid.spawn_tile()
+        grids.append(grid)
+
+    signal.signal(signal.SIGWINCH, partial(term_resize, term, grids))
 
     score = 0
     with term.fullscreen(), term.cbreak(), term.hidden_cursor():
-        term_resize(term, grid)
+        term_resize(term, grids)
 
         key = blessed.keyboard.Keystroke('')
-        while key != 'q':
-            draw_score(score, grid, term)
+        game_over = False
+        while key != 'q' and not game_over:
+            draw_score(score, term)
 
             key = term.inkey()
 
             direction = grid_moves.get(key.name or key)
             if direction:
-                actions = grid.move(direction)
+                for grid in grids:
+                    actions = grid.move(direction)
 
-                for action in actions:
-                    grid.draw_empty_tile(*action.old)
+                    for action in actions:
+                        grid.draw_empty_tile(*action.old)
 
-                    if action.type == Actions.merge:
-                        score += grid[action.new.row][action.new.column].value
+                        if action.type == Actions.merge:
+                            row, column = action.new
+                            score += grid[row][column].value
 
-                if actions:  # had a successfull move?
-                    grid.spawn_tile(exponent=2 if random.random() > 0.9 else 1)
+                    if actions:  # had a successfull move?
+                        grid.spawn_tile(
+                            exponent=2 if random.random() > 0.9 else 1)
 
-                    grid.draw_tiles()
+                        grid.draw_tiles()
 
-                if all(chain(*grid)):
-                    possible_moves = 0
-                    for direction in Direction:
-                        if grid.move(direction, apply=False):
-                            possible_moves += 1
+                    if all(chain(*grid)):
+                        possible_moves = 0
+                        for direction in Direction:
+                            if grid.move(direction, apply=False):
+                                possible_moves += 1
 
-                    if possible_moves == 0:
-                        draw_score(score, grid, term, end=True)
-                        term.inkey()
+                        if possible_moves == 0:
+                            draw_score(score, term, end=True)
+                            term.inkey()
 
-                        break
+                            game_over = True
 
-    high = reduce(lambda o, t: max(o, t.value), filter(None, chain(*grid)), 0)
+    high = reduce(lambda o, t: max(o, t.value),
+                  filter(None, chain(t for g in grids for t in chain(*g))), 0)
     print("highest tile: {}\nscore: {}".format(high, score))
 
     return 0
