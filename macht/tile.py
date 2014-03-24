@@ -28,5 +28,14 @@ class Tile(object):
         return (isinstance(other, Tile) and self.base == other.base and
                 self.exponent == other.exponent)
 
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        if not isinstance(other, Tile):
+            raise NotImplementedError
+
+        return self.value < other.value
+
     def __repr__(self):
         return "Tile({}, {})".format(self.base, self.exponent)
