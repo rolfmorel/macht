@@ -17,11 +17,11 @@ class GridFullError(Exception):
 
 
 class GridAction(object):
-    def __init__(self, type, new_pos, old_pos=None):
+    def __init__(self, type, new, old=None):
         # Actions:
         self.type = type
         # Position:
-        self.new, self.old = new_pos, old_pos
+        self.new, self.old = new, old
 
     def __repr__(self):
         return "GridAction({}, new={}{})".format(self.type, self.new,
