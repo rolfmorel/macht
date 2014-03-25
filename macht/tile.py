@@ -38,4 +38,4 @@ class Tile(object):
         return self.value < other.value
 
     def __repr__(self):
-        return "Tile({}, {})".format(self.base, self.exponent)
+        return "Tile(base={}, exponent={})".format(self.base, self.exponent)

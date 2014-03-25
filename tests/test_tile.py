@@ -39,4 +39,7 @@ def test_cmp():
 
 
 def test_repr():
-    repr(tile.Tile())
+    from macht.tile import Tile
+
+    assert repr(tile.Tile()) == 'Tile(base=2, exponent=1)'
+    eval(repr(tile.Tile()))

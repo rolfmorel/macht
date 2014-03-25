@@ -191,7 +191,17 @@ def test_setitem():  # highly impractical, but add for coverage
     g = grid.Grid()
     g[0] = [None for _ in range(len(g[0]))]
 
+    assert g._grid[0] == [None for _ in range(len(g[0]))]
+
 
 def test_repr():
-    repr(grid.Grid())
-    repr(grid.GridAction(grid.Actions.spawn, grid.Position(3, 3)))
+    from macht.grid import Grid, GridAction, Actions, Position
+
+    assert repr(grid.Grid()) == 'Grid(rows=4, cols=4)'
+    eval(repr(grid.Grid()))
+
+    action = grid.GridAction(grid.Actions.spawn,
+                             grid.Position(row=3, column=3))
+    assert (repr(action) ==
+            'GridAction(Actions.spawn, new=Position(row=3, column=3))')
+    eval(repr(grid.GridAction(grid.Actions.spawn, grid.Position(3, 3))))
