@@ -93,8 +93,8 @@ def test_move_tile_merge_tiles():
     assert action.type == grid.Actions.move
     assert action.old == (3, 3) and action.new == (3, 0)
 
-    pytest.raises(Exception, g.merge_tiles, grid.Position(3, 3), (0, 3))
-    pytest.raises(Exception, g.merge_tiles, (0, 3), grid.Position(3, 3))
+    pytest.raises(ValueError, g.merge_tiles, grid.Position(3, 3), (0, 3))
+    pytest.raises(ValueError, g.merge_tiles, (0, 3), grid.Position(3, 3))
 
     g.spawn_tile(2, 3)
 
