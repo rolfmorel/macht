@@ -12,6 +12,10 @@ Position = namedtuple('Position', "row column")
 Actions = Enum('Actions', "spawn move merge")
 
 
+class GridFullError(Exception):
+    pass
+
+
 class GridAction(object):
     def __init__(self, type, new_pos, old_pos=None):
         # Actions:
@@ -56,7 +60,7 @@ class Grid(object):
                     empty_tiles.append((row_idx, col_idx))
 
         if len(empty_tiles) == 0:
-            raise Exception  # TODO: more useful exception
+            raise GridFullError("no empty tiles")
 
         row, column = random.choice(empty_tiles)
 
