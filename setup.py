@@ -12,7 +12,7 @@ setup(
     author_email="rolfmorel@gmail.com",
     packages=find_packages(exclude=["tests"]),
     license='LGPLv3',
-    install_requires=['blessed'],
+    install_requires=['blessed', 'enum34'],
     platforms=['Linux'],
     entry_points={'console_scripts': ('macht = macht.term:main')},
     description=("A 2048 clone in python with terminal ui frontend")
