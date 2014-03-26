@@ -31,12 +31,14 @@ def grid_dimension(string):
             "grid dimension was should look like: '4x4'")
 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(
+    description="A game with the objective of merging tiles by moving them.",
+    epilog="Use the arrow, wasd or hjkl keys to move the tiles.")
 parser.add_argument('grid_dims', metavar='GRID_DIMENSIONS', default=[(4, 4)],
                     type=grid_dimension, nargs='*',
-                    help="Dimensions used for gird(s), default: '4x4'")
+                    help="Dimensions used for grid(s), default: '4x4'")
 parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
-                    default=2, help="base value of each tile")
+                    default=2, help="base value of all tiles")
 
 
 def draw_score(score, term, end=False):
