@@ -28,7 +28,7 @@ def grid_dimension(string):
         return int(rows), int(cols)
     except ValueError:
         raise argparse.ArgumentTypeError(
-            "grid dimension was should look like: '4x4'")
+            "grid dimension should look like: '4x4'")
 
 
 parser = argparse.ArgumentParser(
