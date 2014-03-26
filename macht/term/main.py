@@ -105,42 +105,41 @@ def main(args=None):
     with term.fullscreen(), term.cbreak(), term.hidden_cursor():
         term_resize(term, grids)
 
-        key = blessed.keyboard.Keystroke('')
         game_over = False
-        while key != 'q' and not game_over:
-            draw_score(score, term)
+        while True:
+            draw_score(score, term, end=game_over)
 
             key = term.inkey()
+            if key == 'q' or game_over:
+                break
 
             direction = grid_moves.get(key.name or key)
-            if direction:
-                for grid in grids:
-                    actions = grid.move(direction)
+            if not direction:
+                continue
 
-                    for action in actions:
-                        grid.draw_empty_tile(*action.old)
+            for grid in grids:
+                actions = grid.move(direction)
 
-                        if action.type == Actions.merge:
-                            row, column = action.new
-                            score += grid[row][column].value
+                for action in actions:
+                    grid.draw_empty_tile(*action.old)
 
-                    if actions:  # had a successfull move?
-                        grid.spawn_tile(
-                            exponent=2 if random.random() > 0.9 else 1)
+                    if action.type == Actions.merge:
+                        row, column = action.new
+                        score += grid[row][column].value
 
-                        grid.draw_tiles()
+                if actions:  # had any successfull move(s)?
+                    grid.spawn_tile(exponent=2 if random.random() > 0.9 else 1)
 
-                    if all(chain(*grid)):
-                        possible_moves = 0
-                        for direction in Direction:
-                            if grid.move(direction, apply=False):
-                                possible_moves += 1
+                    grid.draw_tiles()
 
-                        if possible_moves == 0:
-                            draw_score(score, term, end=True)
-                            term.inkey()
+                if all(chain(*grid)):
+                    possible_moves = 0
+                    for direction in Direction:
+                        if grid.move(direction, apply=False):
+                            possible_moves += 1
 
-                            game_over = True
+                    if possible_moves == 0:
+                        game_over = True
 
     high = reduce(lambda o, t: max(o, t.value),
                   filter(None, chain(t for g in grids for t in chain(*g))), 0)
