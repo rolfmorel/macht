@@ -4,15 +4,12 @@ import signal
 import argparse
 from functools import partial, reduce
 from itertools import chain
-from collections import namedtuple
 
 import blessed
 
 from ..grid import Direction, Actions
 from .grid import Grid
 from .tile import Tile
-
-TileDimensions = namedtuple('TileDimensions', "width height")
 
 up, left = ('w', 'k', 'KEY_UP'), ('a', 'h', 'KEY_LEFT')
 down, right = ('s', 'j', 'KEY_DOWN'), ('d', 'l', 'KEY_RIGHT')
