@@ -133,12 +133,10 @@ def main(args=None):
                     grid.draw_tiles()
 
                 if all(chain(*grid)):
-                    possible_moves = 0
-                    for direction in Direction:
-                        if grid.move(direction, apply=False):
-                            possible_moves += 1
-
-                    if possible_moves == 0:
+                    for dir in Direction:
+                        if grid.move(dir, apply=False):
+                            break  # At least one possible move
+                    else:  # No possible moves
                         game_over = True
 
     high = reduce(lambda o, t: max(o, t.value),
