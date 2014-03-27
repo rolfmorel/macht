@@ -11,7 +11,7 @@ setup(
     version=macht.__version__,
     description="A 2048 clone in python with terminal ui frontend",
     long_description=open(os.path.join(os.path.dirname(__file__),
-                          'README.md')).read(),
+                          'README.rst')).read(),
     author="Rolf Morel",
     author_email="rolfmorel@gmail.com",
     url="https://github.com/polyphemus/macht",

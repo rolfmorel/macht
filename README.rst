@@ -1,43 +1,52 @@
-# Macht
+=====
+Macht
+=====
 
-**macht** is a [2048](http://gabrielecirulli.github.io/2048/) clone in python with Terminal UI
+A `2048`_ clone in python with Terminal UI
+---------------------------------------------------------------------------------
+
+.. image:: https://mediacru.sh/vxW8AH7nzr6B.gif
+   :target: https://mediacru.sh/vxW8AH7nzr6B
+
+Install
+-------
+
+Using the `pip` package manager: ::
+
+    pip install macht
 
 
-![MediaCrush](https://mediacru.sh/vxW8AH7nzr6B.gif)
+Or: ::
 
-## Install
+    python ./setup.py install
 
-Using the `pip` package manager:
+Play
+----
+::
 
-> pip install macht
+    macht
 
+Or without installing (in the project directory): ::
 
-Or:
+    python -m macht
 
-> python ./setup.py install
+Use either the arrow keys or the ``wasd`` keys or the ``hjkl`` keys to move the tiles.
 
-## Play
+Options
+-------
 
-> macht
+Specify the board size: ::
 
-Or without installing (in the project directory):
+    macht 5x5
 
-> python -m macht
+Play on multiple grids simultaneously: ::
 
-Use either the arrow keys or the `wasd` keys or the `hjkl` keys to move the tiles.
+     macht 3x3 3x3 3x3
 
-## Options
+Play with a different base number: ::
 
-Specify the board size:
+     macht --base 3
 
-> macht 5x5
+To display a help message use the ``-h/--help`` option.
 
-Play on multi grids simultaneously:
-
-> macht 3x3 3x3 3x3
-
-Play with a different base number:
-
-> macht --base 3
-
-To display a help message use the `-h/--help` option.
+.. _`2048`: http://gabrielecirulli.github.io/2048/
