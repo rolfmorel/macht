@@ -14,7 +14,7 @@ Using the `pip` package manager:
 
 Or:
 
- > ./setup.py install
+> python ./setup.py install
 
 ## Play
 
