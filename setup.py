@@ -9,7 +9,7 @@ import macht
 setup(
     name='macht',
     version=macht.__version__,
-    description="A 2048 clone in python with terminal ui frontend",
+    description="A 2048 clone in python with Terminal UI",
     long_description=open(os.path.join(os.path.dirname(__file__),
                           'README.rst')).read(),
     author="Rolf Morel",
