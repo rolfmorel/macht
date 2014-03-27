@@ -3,7 +3,6 @@ Macht
 =====
 
 A `2048`_ clone in python with Terminal UI
----------------------------------------------------------------------------------
 
 .. image:: https://mediacru.sh/vxW8AH7nzr6B.gif
    :target: https://mediacru.sh/vxW8AH7nzr6B
