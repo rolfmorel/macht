@@ -44,7 +44,7 @@ def draw_score(score, term, end=False):
         print(term.bold_on_red(msg) if end else term.bold(msg))
 
 
-def term_resize(term, grids, signum=None, frame=None):
+def term_resize(term, grids):
     print(term.clear())
 
     max_width = (term.width - (len(grids) + 1) * 2) // len(grids)
@@ -59,8 +59,7 @@ def term_resize(term, grids, signum=None, frame=None):
             with term.location(0, 0):
                 print(term.red("terminal size is too small;\n"
                                "please resize the terminal"))
-
-            return
+            return False  # game can not continue until after another resize
 
     margin = (term.width - sum(g.width for g in grids) -
               (len(grids) - 1) * 2) // 2
@@ -78,8 +77,13 @@ def term_resize(term, grids, signum=None, frame=None):
         grid.draw()
         grid.draw_tiles()
 
+    return True
+
 
 def main(args=None):
+    global do_resize
+    do_resize = True
+
     opts = parser.parse_args(args or sys.argv[1:])
 
     term = blessed.Terminal()
@@ -96,22 +100,29 @@ def main(args=None):
 
         grids.append(grid)
 
-    signal.signal(signal.SIGWINCH, partial(term_resize, term, grids))
+    def on_resize(signal, frame):
+        global do_resize
+        do_resize = True
+    signal.signal(signal.SIGWINCH, on_resize)
 
     score = 0
+    game_over = False
+    term_too_small = False
     with term.fullscreen(), term.cbreak(), term.hidden_cursor():
-        term_resize(term, grids)
-
-        game_over = False
         while True:
-            draw_score(score, term, end=game_over)
+            if do_resize:
+                term_too_small = not term_resize(term, grids)
+                do_resize = False
 
-            key = term.inkey()
+            if not term_too_small:
+                draw_score(score, term, end=game_over)
+
+            key = term.inkey(0.5)
             if key == 'q' or game_over:
                 break
 
             direction = grid_moves.get(key.name or key)
-            if not direction:
+            if not direction or term_too_small:
                 continue
 
             for grid in grids:
