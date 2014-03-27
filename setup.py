@@ -34,5 +34,6 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Topic :: Games/Entertainment :: Puzzle Games',
         'Topic :: Terminals'
-        ]
+        ],
+    keywords=['2048', 'terminal', 'game', 'board', 'puzzle', 'tiles']
 )
