@@ -19,7 +19,7 @@ setup(
     license='LGPLv3',
     install_requires=['blessed', 'enum34'],
     entry_points={'console_scripts': ('macht = macht.term:main')},
-    classifiers=(
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
@@ -34,5 +34,5 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Topic :: Games/Entertainment :: Puzzle Games',
         'Topic :: Terminals'
-        )
+        ]
 )
