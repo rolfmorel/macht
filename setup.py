@@ -20,7 +20,6 @@ setup(
     install_requires=['blessed', 'enum34'],
     entry_points={'console_scripts': ('macht = macht.term:main')},
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: '
