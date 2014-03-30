@@ -29,7 +29,7 @@ Or without installing (in the project directory): ::
 
     python -m macht
 
-Use either the arrow keys or the ``wasd`` keys or the ``hjkl`` keys to move the tiles.
+Use either the arrow keys, the ``wasd`` keys, or the ``hjkl`` keys to move the tiles.
 
 Options
 -------
