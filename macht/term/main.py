@@ -117,7 +117,7 @@ def main(args=None):
             if not term_too_small:
                 draw_score(score, term, end=game_over)
 
-            key = term.inkey(0.5)
+            key = term.inkey(_intr_continue=False)
             if key == 'q' or game_over:
                 break
 
