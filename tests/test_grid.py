@@ -187,6 +187,27 @@ def test_move_merge():
     assert sum(1 for _ in filter(None, chain(*g))) == 3
 
 
+def test_no_merge_after_move():
+    "Tiles should not merge when there is another valued tile in between."
+    g = grid.Grid()
+    g.spawn_tile(0, 0, exponent=1)
+    g.spawn_tile(1, 0, exponent=2)
+    g.spawn_tile(2, 0, exponent=1)
+    g.move(grid.Direction.down)
+    assert g[1][0].exponent == 1
+    assert g[2][0].exponent == 2
+    assert g[3][0].exponent == 1
+
+    g = grid.Grid()
+    g.spawn_tile(0, 0, exponent=1)
+    g.spawn_tile(0, 1, exponent=2)
+    g.spawn_tile(0, 2, exponent=1)
+    g.move(grid.Direction.right)
+    assert g[0][1].exponent == 1
+    assert g[0][2].exponent == 2
+    assert g[0][3].exponent == 1
+
+
 def test_setitem():  # highly impractical, but add for coverage
     g = grid.Grid()
     g[0] = [None for _ in range(len(g[0]))]

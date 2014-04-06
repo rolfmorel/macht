@@ -1,5 +1,6 @@
 import random
 from collections import namedtuple
+from itertools import product
 
 from enum import Enum
 
@@ -92,74 +93,74 @@ class Grid(object):
         return GridAction(Actions.merge, new, old)
 
     def move_vertical(self, direction, apply=True):
-        def correct_direction(seq):
-            return reversed(seq) if direction is Direction.down else seq
+        row_idx_iter = range(len(self))
+        if direction is Direction.down:
+            row_idx_iter = reversed(row_idx_iter)
 
-        for col_idx in range(len(self[0])):
-            for row_idx in correct_direction(range(len(self))):
-                if direction is Direction.down:
-                    pos_in_column = range(row_idx - 1, -1, -1)
-                else:
-                    pos_in_column = range(row_idx + 1, len(self))
+        for col_idx, row_idx in product(range(len(self[0])), row_idx_iter):
+            if direction is Direction.down:
+                pos_in_column = range(row_idx - 1, -1, -1)
+            else:
+                pos_in_column = range(row_idx + 1, len(self))
 
-                for row_pos in pos_in_column:
-                    if self[row_idx][col_idx]:  # Tile occupied, maybe merge
+            for row_pos in pos_in_column:
+                if self[row_idx][col_idx]:  # Tile occupied, maybe merge
+                    if self[row_pos][col_idx]:
+                        if self[row_idx][col_idx] == self[row_pos][col_idx]:
+                            old = Position(row_pos, col_idx)
+                            new = Position(row_idx, col_idx)
+
+                            yield self.merge_tiles(old, new, apply=apply)
+                        break
+                elif self[row_pos][col_idx]:
+                    old = Position(row_pos, col_idx)
+                    new = Position(row_idx, col_idx)
+
+                    yield self.move_tile(old, new, apply=apply)
+
+                    for row_pos in pos_in_column:
                         if self[row_pos][col_idx]:
                             if self[row_idx][col_idx] == self[row_pos][col_idx]:
                                 old = Position(row_pos, col_idx)
-                                new = Position(row_idx, col_idx)
 
                                 yield self.merge_tiles(old, new, apply=apply)
                             break
-                    elif self[row_pos][col_idx]:
-                        old = Position(row_pos, col_idx)
-                        new = Position(row_idx, col_idx)
-
-                        yield self.move_tile(old, new, apply=apply)
-
-                        for row_pos in pos_in_column:
-                            if self[row_idx][col_idx] == self[row_pos][col_idx]:
-                                old = Position(row_pos, col_idx)
-
-                                yield self.merge_tiles(old, new, apply=apply)
-
-                                break
-                        break
+                    break
 
     def move_horizontal(self, direction, apply=True):
-        def correct_direction(seq):
-            return reversed(seq) if direction is Direction.right else seq
+        col_idx_iter = range(len(self[0]))
+        if direction is Direction.right:
+            col_idx_iter = reversed(col_idx_iter)
 
-        for row_idx in range(len(self)):
-            for col_idx in correct_direction(range(len(self[0]))):
-                if direction is Direction.right:
-                    pos_in_row = range(col_idx - 1, -1, -1)
-                else:
-                    pos_in_row = range(col_idx + 1, len(self[0]))
+        for row_idx, col_idx in product(range(len(self)), col_idx_iter):
+            if direction is Direction.right:
+                pos_in_row = range(col_idx - 1, -1, -1)
+            else:
+                pos_in_row = range(col_idx + 1, len(self[0]))
 
-                for col_pos in pos_in_row:
-                    if self[row_idx][col_idx]:
+            for col_pos in pos_in_row:
+                if self[row_idx][col_idx]:
+                    if self[row_idx][col_pos]:
+                        if self[row_idx][col_idx] == self[row_idx][col_pos]:
+                            old = Position(row_idx, col_pos)
+                            new = Position(row_idx, col_idx)
+
+                            yield self.merge_tiles(old, new, apply=apply)
+                        break
+                elif self[row_idx][col_pos]:
+                    old = Position(row_idx, col_pos)
+                    new = Position(row_idx, col_idx)
+
+                    yield self.move_tile(old, new, apply=apply)
+
+                    for col_pos in pos_in_row:
                         if self[row_idx][col_pos]:
                             if self[row_idx][col_idx] == self[row_idx][col_pos]:
                                 old = Position(row_idx, col_pos)
-                                new = Position(row_idx, col_idx)
 
                                 yield self.merge_tiles(old, new, apply=apply)
                             break
-                    elif self[row_idx][col_pos]:
-                        old = Position(row_idx, col_pos)
-                        new = Position(row_idx, col_idx)
-
-                        yield self.move_tile(old, new, apply=apply)
-
-                        for col_pos in pos_in_row:
-                            if self[row_idx][col_idx] == self[row_idx][col_pos]:
-                                old = Position(row_idx, col_pos)
-
-                                yield self.merge_tiles(old, new, apply=apply)
-
-                                break
-                        break
+                    break
 
     def move(self, direction, apply=True):
         if not isinstance(direction, Direction):
