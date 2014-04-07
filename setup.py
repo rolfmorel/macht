@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 
 import os
+import sys
 from setuptools import setup, find_packages
 
 import macht
 
+dependencies = ['blessed']
+if sys.version_info < (3, 4):  # python 3.4 include the enum package
+    dependencies.append('enum34')
 
 setup(
     name='macht',
@@ -17,7 +21,7 @@ setup(
     url="https://github.com/polyphemus/macht",
     packages=find_packages(exclude=["tests"]),
     license='LGPLv3',
-    install_requires=['blessed', 'enum34'],
+    install_requires=dependencies,
     entry_points={'console_scripts': ('macht = macht.term:main')},
     classifiers=[
         'Environment :: Console',
