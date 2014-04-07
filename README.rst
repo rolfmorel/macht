@@ -51,8 +51,8 @@ To display a help message use the ``-h/--help`` option.
 Dependencies
 ------------
 
-- **`blessed`_** -- Used as a general abstraction on terminal input and output.
-- **`enum package`_** -- Enumerations for python. Included with python3.4, older python versions need to use the **`enum34`_** package.
+- `blessed`_ -- Used as a general abstraction on terminal input and output.
+- `enum package`_ -- Enumerations for python. Included with python3.4, older python versions need to use the `enum34`_ package.
 
 .. _`2048`: http://gabrielecirulli.github.io/2048/
 .. _`Blessed`: https://pypi.python.org/pypi/blessed/
