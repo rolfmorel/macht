@@ -40,12 +40,21 @@ Specify the board size: ::
 
 Play on multiple grids simultaneously: ::
 
-     macht 3x3 3x3 3x3
+    macht 3x3 3x3 3x3
 
 Play with a different base number: ::
 
-     macht --base 3
+    macht --base 3
 
 To display a help message use the ``-h/--help`` option.
 
+Dependencies
+------------
+
+- **`blessed`_** -- Used as a general abstraction on terminal input and output.
+- **`enum package`_** -- Enumerations for python. Included with python3.4, older python versions need to use the **`enum34`_** package.
+
 .. _`2048`: http://gabrielecirulli.github.io/2048/
+.. _`Blessed`: https://github.com/jquast/blessed
+.. _`enum package`: https://docs.python.org/3.4/library/enum.html
+.. _`enum34`: https://pypi.python.org/pypi/enum34
