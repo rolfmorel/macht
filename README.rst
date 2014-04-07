@@ -4,8 +4,8 @@ Macht
 
 A `2048`_ clone in python with Terminal UI
 
-.. image:: https://mediacru.sh/vxW8AH7nzr6B.gif
-   :target: https://mediacru.sh/vxW8AH7nzr6B
+.. image:: https://mediacru.sh/lwz2N8zBc3Ph.gif
+   :target: https://mediacru.sh/lwz2N8zBc3Ph
 
 Install
 -------
