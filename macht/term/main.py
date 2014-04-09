@@ -147,8 +147,9 @@ def main(args=None):
                     else:  # No possible moves
                         game_over = True
 
-    high = reduce(lambda o, t: max(o, t.value),
-                  filter(None, chain(t for g in grids for t in chain(*g))), 0)
+    high = 0
+    for max_tile in filter(None, (g.highest_tile for g in grids)):
+        high = max(high, max_tile.value)
     print("highest tile: {}\nscore: {}".format(high, score))
 
     return 0
