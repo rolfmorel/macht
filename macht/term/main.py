@@ -66,15 +66,8 @@ def term_resize(term, grids):
     for grid_idx, grid in enumerate(grids):
         grid.x = margin + sum(g.width for g in grids[:grid_idx]) + grid_idx * 2
 
-        for row_idx, row in enumerate(grid):
-            for col_idx, tile in enumerate(row):
-                if tile:
-                    tile.x, tile.y = grid.tile_coord(row_idx, col_idx)
-                    tile.height, tile.width = grid.tile_height, grid.tile_width
-
-                    grid[row_idx][col_idx] = tile
-
         grid.draw()
+        grid.update_tiles()
         grid.draw_tiles()
 
     return True

@@ -1,4 +1,4 @@
-from itertools import chain
+from itertools import product, chain
 
 from .. import grid
 from . import tile
@@ -37,6 +37,14 @@ class Grid(grid.Grid):
             with self.term.location(self.x, self.y + vert_offset):
                 print(style(self.cross_div.join(
                       [self.hor_div * self.tile_width] * cols)))
+
+    def update_tiles(self):
+        for row_idx, col_idx in product(range(len(self)), range(len(self[0]))):
+            if self[row_idx][col_idx]:
+                tile = self[row_idx][col_idx]
+                tile.x, tile.y = self.tile_coord(row_idx, col_idx)
+                tile.height, tile.width = self.tile_height, self.tile_width
+                self[row_idx][col_idx] = tile
 
     def draw_tiles(self):
         for tile in filter(None, chain(*self)):  # all non-empty tiles
