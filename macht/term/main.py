@@ -111,7 +111,7 @@ def main(args=None):
                 draw_score(score, term, end=game_over)
 
             key = term.inkey(_intr_continue=False)
-            if key == 'q' or game_over:
+            if key in ('q', 'KEY_ESCAPE') or game_over:
                 break
 
             direction = grid_moves.get(key.name or key)
