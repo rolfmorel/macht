@@ -32,25 +32,25 @@ def test_spawn_tile():
 
     assert sum(1 for _ in filter(None, chain(*new_grid(6, 6, 18)))) == 18
 
-    pytest.raises(grid.GridFullError, new_grid, 4, 4, 17)
+    pytest.raises(grid.SpawnTileError, new_grid, 4, 4, 17)
 
     g = grid.Grid()
     g.spawn_tile(row=0, column=0)
     assert g[0][0]
 
-    pytest.raises(grid.GridFullError, g.spawn_tile, row=0, column=0)
+    pytest.raises(grid.SpawnTileError, g.spawn_tile, row=0, column=0)
 
     g.spawn_tile(row=0)
     g.spawn_tile(row=0)
     g.spawn_tile(row=0)
     assert all(g[0])
-    pytest.raises(grid.GridFullError, g.spawn_tile, row=0)
+    pytest.raises(grid.SpawnTileError, g.spawn_tile, row=0)
 
     g.spawn_tile(column=0)
     g.spawn_tile(column=0)
     g.spawn_tile(column=0)
     assert all(g[row_idx][0] for row_idx in range(4))
-    pytest.raises(grid.GridFullError, g.spawn_tile, column=0)
+    pytest.raises(grid.SpawnTileError, g.spawn_tile, column=0)
 
     action = g.spawn_tile(3, 3)
     assert g[3][3]

@@ -13,7 +13,7 @@ Position = namedtuple('Position', "row column")
 Actions = Enum('Actions', "spawn move merge")
 
 
-class GridFullError(Exception):
+class SpawnTileError(Exception):
     pass
 
 
@@ -69,7 +69,7 @@ class Grid(object):
                     empty_tiles.append((row_idx, col_idx))
 
         if len(empty_tiles) == 0:
-            raise GridFullError("no empty tiles")
+            raise SpawnTileError("no empty tiles")
 
         row, column = random.choice(empty_tiles)
 
