@@ -1,6 +1,6 @@
 import random
 from collections import namedtuple
-from itertools import product
+from itertools import product, chain
 
 from enum import Enum
 
@@ -50,6 +50,14 @@ class Grid(object):
 
     def __repr__(self):
         return "Grid(rows={}, cols={})".format(len(self), len(self[0]))
+
+    @property
+    def highest_tile(self):
+        ret_tile = None
+        for tile in filter(None, chain(*self)):
+            ret_tile = tile if not ret_tile else max(ret_tile, tile)
+
+        return ret_tile
 
     def spawn_tile(self, row=None, column=None, apply=True, **kwargs):
         rows, cols = len(self), len(self[0])

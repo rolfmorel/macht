@@ -64,6 +64,16 @@ def test_spawn_tile():
     assert g[2][1].base == 3 and g[2][1].exponent == 4
 
 
+def test_highest_tile():
+    g = grid.Grid()
+    assert g.highest_tile is None
+
+    g.spawn_tile(exponent=1)
+    assert g.highest_tile
+    g.spawn_tile(exponent=2)
+    assert g.highest_tile.exponent == 2
+
+
 def test_resize():
     g = grid.Grid()
 
