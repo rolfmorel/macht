@@ -7,6 +7,7 @@ from itertools import chain
 
 import blessed
 
+from .. import save
 from ..grid import Direction, Actions
 from .grid import Grid
 from .tile import Tile
@@ -22,7 +23,7 @@ for keys, direction in zip((up, left, down, right), Direction):
 def grid_dimension(string):
     rows, _, cols = string.partition('x')
     try:
-        return int(rows), int(cols)
+        return {'rows': int(rows), 'cols': int(cols)}
     except ValueError:
         raise argparse.ArgumentTypeError(
             "grid dimension should look like: '4x4'")
@@ -31,11 +32,16 @@ def grid_dimension(string):
 parser = argparse.ArgumentParser(
     description="A game with the objective of merging tiles by moving them.",
     epilog="Use the arrow, wasd or hjkl keys to move the tiles.")
-parser.add_argument('grid_dims', metavar='GRID_DIMENSIONS', default=[(4, 4)],
+parser.add_argument('grid_dims', metavar='GRID_DIMENSIONS',
                     type=grid_dimension, nargs='*',
                     help="Dimensions used for grid(s), default: '4x4'")
-parser.add_argument('-b', '--base', metavar='N', dest='base', type=int,
-                    default=2, help="base value of all tiles")
+parser.add_argument('-b', '--base', metavar='N', type=int,
+                    help="base value of all tiles")
+parser.add_argument('-r', '--resume', metavar='SAVE_FILE', nargs='?',
+                    default=False, const=None,
+                    help="resume previous game. SAVE_FILE is used to save to "
+                    "and resume from. Specifying grid dimensions and/or base "
+                    "starts a new game without resuming from SAVE_FILE.")
 
 
 def draw_score(score, term, end=False):
@@ -77,30 +83,43 @@ def main(args=None):
     global do_resize
     do_resize = True
 
-    opts = parser.parse_args(args or sys.argv[1:])
-
     term = blessed.Terminal()
-
-    DimTile = partial(Tile, base=opts.base, term=term)
-
-    grids = []
-    for grid_dim in opts.grid_dims:
-        rows, cols = grid_dim
-
-        grid = Grid(x=0, y=1, rows=rows, cols=cols, term=term, Tile=DimTile)
-        grid.spawn_tile()
-        grid.spawn_tile()
-
-        grids.append(grid)
+    term_too_small = False
+    game_over = False
 
     def on_resize(signal, frame):
         global do_resize
         do_resize = True
     signal.signal(signal.SIGWINCH, on_resize)
 
-    score = 0
-    game_over = False
-    term_too_small = False
+    opts = parser.parse_args(args or sys.argv[1:])
+    grid_dims = opts.grid_dims or [{'rows': 4, 'cols': 4}]
+    base_num = opts.base or 2
+    resume = opts.resume if opts.resume is not False else False
+
+    grids = []
+    save_state = {}
+    if resume is not False and not (opts.grid_dims or opts.base):
+        save_state = save.load_from_file(resume)
+
+    score = save_state.get('score', 0)
+    for grid_state in save_state.get('grids', grid_dims):
+        TermTile = partial(Tile, term=term,
+                           base=grid_state.pop('base', base_num))
+        tiles = grid_state.pop('tiles', ())
+
+        grid = Grid(x=0, y=1, term=term, Tile=TermTile, **grid_state)
+        if tiles:
+            for tile_state in tiles:
+                grid.spawn_tile(**tile_state)
+        else:
+            grid.spawn_tile()
+            grid.spawn_tile()
+
+        game_over = game_over or len(grid.possible_moves) == 0
+
+        grids.append(grid)
+
     with term.fullscreen(), term.cbreak(), term.hidden_cursor():
         while True:
             if do_resize:
@@ -112,6 +131,7 @@ def main(args=None):
 
             key = term.inkey(_intr_continue=False)
             if key in ('q', 'KEY_ESCAPE') or game_over:
+                save.write_to_file(score, grids, filename=resume or None)
                 break
 
             direction = grid_moves.get(key.name or key)
