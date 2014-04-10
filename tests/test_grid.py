@@ -1,4 +1,4 @@
-from itertools import chain
+from itertools import product, chain
 
 import pytest
 from macht import grid
@@ -72,6 +72,30 @@ def test_highest_tile():
     assert g.highest_tile
     g.spawn_tile(exponent=2)
     assert g.highest_tile.exponent == 2
+
+
+def test_possible_moves():
+    g = grid.Grid()
+    assert len(g.possible_moves) == 0
+
+    g.spawn_tile(1, 0)
+    assert len(g.possible_moves) == 3
+
+    g.move(grid.Direction.up)
+    assert g.possible_moves == [grid.Direction.down, grid.Direction.right]
+
+    g.spawn_tile(1, 0, exponent=2)
+    assert len(g.possible_moves) == 2
+
+    g.spawn_tile(2, 0, exponent=1)
+    g.spawn_tile(3, 0, exponent=2)
+    assert g.possible_moves == [grid.Direction.right]
+
+    exponent = 2
+    for row_idx, col_idx in product(range(len(g)), range(1, len(g[0]))):
+        g.spawn_tile(row_idx, col_idx, exponent=exponent)
+        exponent += 1
+    assert len(g.possible_moves) == 0
 
 
 def test_resize():
