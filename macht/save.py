@@ -21,9 +21,8 @@ def grid_to_dict(grid):
 
 
 def write_to_file(score, grids, filename=None):
-    if not filename:
-        os.makedirs(macht_data_dir, exist_ok=True)
-        filename = os.path.join(macht_data_dir, 'default_save.json')
+    filename = filename or os.path.join(macht_data_dir, 'default_save.json')
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     contents = {'score': score,
                 'grids': [grid_to_dict(grid) for grid in grids]}
