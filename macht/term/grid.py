@@ -90,18 +90,21 @@ class Grid(grid.Grid):
         action = super(Grid, self).spawn_tile(*args, **kwargs)
         row, column = action.new
 
-        self[row][column].x, self[row][column].y = self.tile_coord(row, column)
-        self[row][column].height = self.tile_height
-        self[row][column].width = self.tile_width
+        if kwargs.get('apply', True):
+            x, y = self.tile_coord(row, column)
+            self[row][column].x, self[row][column].y = x, y
+            self[row][column].height = self.tile_height
+            self[row][column].width = self.tile_width
 
         return action
 
     def move(self, *args, **kwargs):
         actions = super(Grid, self).move(*args, **kwargs)
 
-        for action in actions:
-            row, col = action.new
+        if kwargs.get('apply', True):
+            for action in actions:
+                row, col = action.new
 
-            self[row][col].x, self[row][col].y = self.tile_coord(row, col)
+                self[row][col].x, self[row][col].y = self.tile_coord(row, col)
 
         return actions
