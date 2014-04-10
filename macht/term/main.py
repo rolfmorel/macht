@@ -134,11 +134,7 @@ def main(args=None):
                     grid.draw_tiles()
 
                 if all(chain(*grid)):
-                    for dir in Direction:
-                        if grid.move(dir, apply=False):
-                            break  # At least one possible move
-                    else:  # No possible moves
-                        game_over = True
+                    game_over = game_over or len(grid.possible_moves) == 0
 
     high = 0
     for max_tile in filter(None, (g.highest_tile for g in grids)):

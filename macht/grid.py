@@ -59,6 +59,10 @@ class Grid(object):
 
         return ret_tile
 
+    @property
+    def possible_moves(self):
+        return [dir for dir in Direction if self.move(dir, apply=False)]
+
     def spawn_tile(self, row=None, column=None, apply=True, **kwargs):
         rows, cols = len(self), len(self[0])
         empty_tiles = []
