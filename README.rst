@@ -46,6 +46,13 @@ Play with a different base number: ::
 
     macht --base 3
 
+Continue where the last game stopped (takes an optional file to resume from/save to): ::
+
+    macht -r
+::
+
+    macht 5x5 --resume '~/.local/share/macht/5x5.json'
+
 To display a help message use the ``-h/--help`` option.
 
 Dependencies
