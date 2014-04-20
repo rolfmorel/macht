@@ -10,12 +10,11 @@ A `2048`_ clone in python with Terminal UI
 Install
 -------
 
-Using the `pip` package manager: ::
+Using the `pip` package manager::
 
     pip install macht
 
-
-Or: ::
+Or::
 
     python ./setup.py install
 
@@ -25,7 +24,7 @@ Play
 
     macht
 
-Or without installing (in the project directory): ::
+Or without installing (in the project directory)::
 
     python -m macht
 
@@ -34,19 +33,19 @@ Use either the arrow keys, the ``wasd`` keys, or the ``hjkl`` keys to move the t
 Options
 -------
 
-Specify the board size: ::
+Specify the board size::
 
     macht 5x5
 
-Play on multiple grids simultaneously: ::
+Play on multiple grids simultaneously::
 
     macht 3x3 3x3 3x3
 
-Play with a different base number: ::
+Play with a different base number::
 
     macht --base 3
 
-Continue where the last game stopped (takes an optional file to resume from/save to): ::
+Continue where the last game stopped (takes an optional file to resume from/save to)::
 
     macht -r
 ::
