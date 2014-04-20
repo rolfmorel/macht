@@ -37,5 +37,7 @@ def load_from_file(filename=None):
     try:
         with open(filename) as save_file:
             return json.load(save_file)
-    except FileNotFoundError:
+    except getattr(__builtins__, 'FileNotFoundError', IOError) as err:
+        if err.errno != 2:  # py2: IOerror but not file not found
+            raise
         return {}
