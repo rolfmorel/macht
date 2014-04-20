@@ -48,6 +48,7 @@ Play with a different base number::
 Continue where the last game stopped (takes an optional file to resume from/save to)::
 
     macht -r
+
 ::
 
     macht 5x5 --resume '~/.local/share/macht/5x5.json'
