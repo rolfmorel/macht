@@ -22,7 +22,11 @@ def grid_to_dict(grid):
 
 def write_to_file(score, grids, filename=None):
     filename = filename or os.path.join(macht_data_dir, 'default_save.json')
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    try:
+        os.makedirs(os.path.dirname(filename))
+    except getattr(__builtins__, 'FileExistsError', OSError) as err:
+        if err.errno != 17:  # py2: OSerror but not file exists
+            raise
 
     contents = {'score': score,
                 'grids': [grid_to_dict(grid) for grid in grids]}
