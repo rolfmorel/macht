@@ -129,7 +129,7 @@ def main(args=None):
             if not term_too_small:
                 draw_score(score, term, end=game_over)
 
-            key = term.inkey(_intr_continue=False)
+            key = term.inkey()
             if key in ('q', 'KEY_ESCAPE') or game_over:
                 save.write_to_file(score, grids, filename=resume or None)
                 break
